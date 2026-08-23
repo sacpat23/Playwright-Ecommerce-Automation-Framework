@@ -6,7 +6,7 @@ class LoginPage{
         this.useName =page.locator("#userEmail");
         this.password =page.locator("#userPassword");
         this.signInButton = page.locator("#login");
-        }
+        }git 
     
     async validLogin(username, password) { 
 
