@@ -24,6 +24,7 @@ export  class DashboardPage {
 
   async navigateToOrders() {
     await this.orders.click();
+    console.log('hello')
   }
 
   async navigateToCart() {
