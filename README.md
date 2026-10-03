@@ -110,6 +110,18 @@ npx playwright test tests/smoke.spec.ts
 npx playwright test --grep '@regression'
 ```
 
+## Run in GitHub Actions
+
+The workflow in `.github/workflows/playwright.yml` runs the smoke and regression suites automatically when code is pushed to `main` or a pull request targeting `main` is updated. It can also be started manually:
+
+1. In GitHub, open **Settings → Secrets and variables → Actions**.
+2. Add repository secrets named `ECOM_USERNAME` and `ECOM_PASSWORD` for the demo test account. Do not put these credentials in the workflow file.
+3. Optionally add the repository variable `ECOM_BASE_URL` if the test environment differs from the default host.
+4. Push a commit to `main` (or update a pull request targeting `main`). To start a run manually, open **Actions → Playwright tests → Run workflow**.
+5. Open the run under the **Actions** tab to see test results. Download its `playwright-report` artifact for the HTML report.
+
+The workflow checks that both credential secrets are configured and fails clearly if either is missing. Pull requests from forks do not receive repository secrets by default, so their workflow run stops at that credential check.
+
 ## View the HTML report
 
 Playwright writes the HTML report to `playwright-report/`. After a test run, serve and open the latest report with:
