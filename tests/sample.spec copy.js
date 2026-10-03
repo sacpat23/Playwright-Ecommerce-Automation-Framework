@@ -1,9 +1,11 @@
 const { test, expect } = require("@playwright/test");
+const username = process.env.ECOM_USERNAME;
+const password = process.env.ECOM_PASSWORD;
 
 test("With Browser fixture test case", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
+  await page.goto("/client/#/auth/login");
   const browser_titile = await page.title();
   console.log(browser_titile);
   console.log(await page.title());
@@ -11,20 +13,25 @@ test("With Browser fixture test case", async ({ browser }) => {
 });
 
 test("With Page fixture test case", async ({ page }) => {
-  await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
+  await page.goto("/client/#/auth/login");
   const page_titile = await page.title();
   console.log(page_titile);
   console.log(await page.title());
   await expect(page).toHaveTitle("Let's");
 });
 
-test.only("Login Page", async ({ page }) => {
+test("Login Page", async ({ page }) => {
+  test.skip(
+    !username || !password,
+    "Set ECOM_USERNAME and ECOM_PASSWORD in the project .env file.",
+  );
+
   const productName = "ZARA COAT 3";
   const products = await page.locator(".card-body");
 
-  await page.goto("https://rahulshettyacademy.com/client/#/auth/login");
-  await page.locator("#userEmail").fill("sachin147patil@gmail.com");
-  await page.locator("#userPassword").fill("sachin23");
+  await page.goto("/client/#/auth/login");
+  await page.locator("#userEmail").fill(username);
+  await page.locator("#userPassword").fill(password);
   await page.locator("#login").click();
 
   await page.waitForLoadState("networkidle");
@@ -53,7 +60,6 @@ test.only("Login Page", async ({ page }) => {
 
   await page.locator("[routerlink='/dashboard/cart']").click();
 
-
   // Cart Page
 
   await page.locator("div li").first().waitFor();
@@ -74,7 +80,7 @@ test.only("Login Page", async ({ page }) => {
 
   const dropdown = page.locator(".ta-results");
   await dropdown.waitFor();
-  
+
   const optionsCount = await dropdown.locator("button").count();
   for (let i = 0; i < optionsCount; ++i) {
     const text = await dropdown.locator("button").nth(i).textContent();
@@ -98,10 +104,6 @@ test.only("Login Page", async ({ page }) => {
 
   await page.locator("button[routerlink*='myorders']").click();
 
-
-
-
-  
   await page.locator("tbody").waitFor();
   const rows = await page.locator("tbody tr");
 

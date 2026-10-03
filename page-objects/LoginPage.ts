@@ -23,7 +23,7 @@ export class LoginPage{
     }
 
     async gotTo() { 
-        await this.page.goto("https://rahulshettyacademy.com/client/#/auth/login");
+        await this.page.goto("/client/#/auth/login");
 
     }
 

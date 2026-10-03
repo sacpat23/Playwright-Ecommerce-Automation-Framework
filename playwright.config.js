@@ -1,4 +1,5 @@
 const { defineConfig, devices } = require("@playwright/test");
+require("dotenv").config();
 
 const config = {
   testDir: "./tests",
@@ -12,9 +13,10 @@ const config = {
   reporter: "html",
 
   use: {
+    baseURL: process.env.ECOM_BASE_URL || "https://rahulshettyacademy.com",
     browserName: "chromium",
-    screenshot: 'on',
-    trace: 'on',
+    screenshot: "on",
+    trace: "on",
   },
 
   /* Configure projects for major browsers */

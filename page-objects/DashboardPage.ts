@@ -1,6 +1,13 @@
-class DashboardPage {
+import { test, expect, Locator, Page } from '@playwright/test';
 
-  constructor(page) {
+export class DashboardPage {
+
+  products: Locator;
+  productsText:Locator;
+  cart:Locator;
+  page: Page;
+
+  constructor(page:Page) {
     this.page = page;
     this.products = page.locator(".card-body");
     this.productsText = page.locator(".card-body b");
@@ -8,19 +15,22 @@ class DashboardPage {
     //this.orders = page.locator("button[routerlink*='myorders']");
   }
 
-  async searchProductAddCart(productName) {
+  async searchProductAddCart(productName:string) {
+    await this.products.first().waitFor({ state: "visible" });
     const titles = await this.productsText.allTextContents();
     console.log(titles);
     const count = await this.products.count();
+    let productAdded = false;
     for (let i = 0; i < count; ++i) {
       if (
-        (await this.products.nth(i).locator("b").textContent()) === productName
+        (await this.products.nth(i).locator("b").textContent())?.trim() === productName
       ) {
-        //add to cart
         await this.products.nth(i).locator("text= Add To Cart").click();
+        productAdded = true;
         break;
       }
     }
+    expect(productAdded, `Product not found: ${productName}`).toBeTruthy();
   }
   
  
@@ -29,4 +39,4 @@ class DashboardPage {
     await this.cart.click();
   }
 }
-module.exports = { DashboardPage };
+//module.exports = { DashboardPage };

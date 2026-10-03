@@ -1,17 +1,19 @@
 //const { test, expect } = require("@playwright/test");
 
 import { test, expect } from '@playwright/test';
+import * as process from 'node:process';
 import dataset from '../Utills/placeorderTestData.json';
 
 
-import { LoginPage } from '../pageobjects_ts/LoginPage';
-import { DashboardPage } from '../pageobjects_ts/DashboardPage';
-import { CheckoutPage } from '../pageobjects_ts/CheckoutPage';
-import { OrderPage } from '../pageobjects_ts/OrderPage';
-import { ThankyouPage } from '../pageobjects_ts/ThankyouPage';
-import { MyorderPage } from '../pageobjects_ts/MyorderPage';
+import { LoginPage } from '../page-objects/LoginPage';
+import { DashboardPage } from '../page-objects/DashboardPage';
+import { CheckoutPage } from '../page-objects/CheckoutPage';
+import { OrderPage } from '../page-objects/OrderPage';
+import { ThankyouPage } from '../page-objects/ThankyouPage';
+import { MyorderPage } from '../page-objects/MyorderPage';
 
-
+const username = process.env.ECOM_USERNAME;
+const password = process.env.ECOM_PASSWORD;
 
 /*const { POManager} = require("../pageobjects/POManager");
 const { DashboardPage } = require("../pageobjects/DashboardPage");
@@ -32,10 +34,11 @@ const { MyorderPage } = require("../pageobjects/MyorderPage");*/
 //const dataset = JSON.parse(JSON.stringify(require("../Utills/placeorderTestData.json")),);
 
 for (const data of dataset) {
-  test.only(`@web E Commerce app flow for products order  ${data.productName}`, async ({ page }) => {
+  test(`@regression @web E Commerce app flow for products order ${data.productName}`, async ({ page }) => {
+    test.skip(!username || !password, 'Set ECOM_USERNAME and ECOM_PASSWORD in the project .env file.');
+    if (!username || !password) return;
+
     // const poManager = new POManager(page);
-    // const username = "sachin147patil@gmail.com";
-    //const password = "sachin";
     //const productName = "ZARA COAT 3";
 
     const products = await page.locator(".card-body");
@@ -43,7 +46,7 @@ for (const data of dataset) {
     const loginPage = new LoginPage(page);
     //const  loginPage = poManager.getLoginPage();
     await loginPage.gotTo();
-    await loginPage.validLogin(data.username, data.password);
+    await loginPage.validLogin(username, password);
 
     const dashboardPage = new DashboardPage(page);
     //const dashboardPage = poManager.getDashboardPage();
@@ -61,7 +64,6 @@ for (const data of dataset) {
     await orderPage.orderVerify();
     await orderPage.navigateToThankyouPage();
 
-    
     const thankyouPage = new ThankyouPage(page);
     //const thankyouPage = poManager.getThankyouPage();
     await thankyouPage.validateThankYouPage();
@@ -72,5 +74,5 @@ for (const data of dataset) {
     const myorderPage = new MyorderPage(page);
     //const myorderPage = poManager.getMyorderPage();
     await myorderPage.serachAndverifyOrder(orderId);
-});
+  });
 }
