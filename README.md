@@ -1,6 +1,6 @@
 # Playwright E-commerce Automation Framework
 
-End-to-end browser automation for the Rahul Shetty Academy e-commerce demo. The project uses Playwright Test, TypeScript page objects, reusable test data, and environment-based credentials to exercise sign-in, product selection, checkout, and order verification.
+End-to-end browser automation for an e-commerce application. The project uses Playwright Test, TypeScript page objects, reusable test data, and environment-based credentials to automate sign-in, product selection, checkout, and order verification.
 
 ## At a glance
 
